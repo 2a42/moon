@@ -1,3 +1,8 @@
+#![feature(convert)]
+mod parser;
+
 fn main() {
-    println!("Hello, world!");
+	for i in parser::Tokenizer::new("x = \"true\" y = false") {
+		println!("{:?}", i);
+	}
 }

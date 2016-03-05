@@ -65,16 +65,20 @@ pub enum Binop {
 	Neq
 }
 
+/// Separates Lua code in words.
+///
 pub struct Separator {
 	src: Vec<char>,
 	i: usize
 }
 
+/// Converts words into tokens.
 pub struct Tokenizer {
 	words: Separator,
 	peeked: Option<Token>
 }
 
+/// Build statements out of tokens.
 pub struct StatementBuilder {
 	tokens: Tokenizer
 }

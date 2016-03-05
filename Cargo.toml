@@ -5,6 +5,7 @@ authors = ["2a42 <2a42@openmailbox.org>"]
 
 [[bin]]
 name = "moon"
+doc = false
 
 [lib]
 name = "moon"

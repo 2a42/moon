@@ -23,7 +23,7 @@ fn tokenize() {
 		Token::OpeningParenthesis,
 		Token::Variable(Variable::Name("var".to_string())),
 		Token::ExpressionSeparator,
-		Token::Constant(Value::Number(4)),
+		Token::Constant(Value::Number(4.0)),
 		Token::ClosingParenthesis
 	]);
 }
@@ -34,7 +34,7 @@ fn tokenize_binops() {
 	assert_eq!(tokens, vec![
 		Token::Variable(Variable::Name("x".to_string())),
 		Token::Binop(Binop::Le),
-		Token::Constant(Value::Number(3))
+		Token::Constant(Value::Number(3.0))
 	])
 }
 
@@ -71,7 +71,7 @@ fn basic_statements() {
 	test_statement("answer = 42",
 		&[Statement::Assignment(
 			Variable::Name("answer".to_string()),
-			Expression::Constant(Value::Number(42))
+			Expression::Constant(Value::Number(42.0))
 	)]);
 	test_statement("local x",
 		&[Statement::SetLocal(Variable::Name("x".to_string()))]
@@ -80,7 +80,7 @@ fn basic_statements() {
 		Statement::SetLocal(Variable::Name("x".to_string())),
 		Statement::Assignment(
 			Variable::Name("x".to_string()),
-			Expression::Constant(Value::Number(4)))
+			Expression::Constant(Value::Number(4.0)))
 	]);
 }
 
@@ -90,7 +90,7 @@ fn function_statements() {
 		Statement::Block(
 			vec!(Statement::Assignment(
 				Variable::Name("y".to_string()),
-				Expression::Constant(Value::Number(3))
+				Expression::Constant(Value::Number(3.0))
 			))
 		)
 	]);
@@ -101,7 +101,7 @@ fn function_statements() {
 				Box::new(Expression::Variable(Variable::Name("fc".to_string()))),
 				vec!(
 					Expression::Variable(Variable::Name("var".to_string())),
-					Expression::Constant(Value::Number(4)))
+					Expression::Constant(Value::Number(4.0)))
 			)
 		)
 	]);

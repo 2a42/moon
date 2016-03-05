@@ -1,12 +1,18 @@
 use std::collections::HashMap;
 use parser::*;
 
+/// A complete Lua environment.
+///
 pub struct Environment {
 	stack: Vec<HashMap<String, Value>>,
 	stack_indice: usize
 }
 
 impl Environment {
+	/// Create a new environment.
+	///
+	/// The new environment has no variables initialized.
+	///
 	pub fn new() -> Environment {
 		Environment {
 			stack: vec!(HashMap::new()),
@@ -14,13 +20,15 @@ impl Environment {
 		}
 	}
 
+	/// Execute a Lua statement previously parsed.
+	///
 	pub fn exec_statement(&mut self, statement: Statement) {
 		match statement {
 			Statement::Assignment(k, v) => {
 				let v = self.evaluate(v);
 				match k {
 					Variable::Name(s) => {
-						self.set_value(s, v);
+						self.set_variable(s, v);
 					}
 				}
 			},
@@ -64,6 +72,10 @@ impl Environment {
 		}
 	}
 
+	/// Check if a value is true.
+	///
+	/// Every value but nil and false are true.
+	///
 	pub fn is_true(v: Value) -> bool {
 		match v {
 			Value::False | Value::Nil => false,
@@ -71,7 +83,13 @@ impl Environment {
 		}
 	}
 
-	pub fn set_value(&mut self, name: String, value: Value) {
+	/// Set the value of a variable.
+	///
+	/// The function will set the most inner local variable to the value,
+	/// or will create a new global variable if no local variable has been
+	/// declared.
+	///
+	pub fn set_variable(&mut self, name: String, value: Value) {
 		if self.stack_indice == 0 {
 			self.stack[0].insert(name.clone(), value.clone());
 			return 
@@ -82,11 +100,15 @@ impl Environment {
 			}
 		}
 		self.stack_indice -= 1;
-		self.set_value(name, value);
+		self.set_variable(name, value);
 		self.stack_indice += 1;
 	}
 
-	pub fn get_value(&self, name: String) -> Value {
+	/// Get the value of a variable.
+	///
+	/// If no value is found, return nil.
+	///
+	pub fn get_variable(&self, name: String) -> Value {
 		for i in 0..(self.stack_indice+1) {
 			if let Some(x) = self.stack[self.stack_indice - i].get(&name) {
 				return x.clone()
@@ -95,13 +117,18 @@ impl Environment {
 		Value::Nil
 	}
 
+	/// Evaluates an expression and return the value.
+	///
+	/// Since expressions can call functions which have side effects,
+	/// this function is not mutable.
+	///
 	pub fn evaluate(&mut self, exp: Expression) -> Value {
 		match exp {
 			Expression::Constant(c) => c,
 			Expression::Variable(v) => {
 				match v {
 					Variable::Name(s) => {
-						self.get_value(s)
+						self.get_variable(s)
 					}
 				}
 			},

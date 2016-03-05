@@ -1,11 +1,12 @@
 #![feature(convert)]
 pub mod parser;
-pub mod interpretor;
+pub mod interpreter;
 use parser::Value;
 use std::io;
 use std::io::prelude::*;
 
-fn print(args: Vec<Value>) -> Value {
+// Print the arguments to stdout
+fn lua_print(args: Vec<Value>) -> Value {
 	for arg in args {
 		match arg {
 			Value::String(s) => {
@@ -38,8 +39,8 @@ fn main() {
 			print("lol")
 		end
 		"#;
-	let mut env = interpretor::Environment::new();
-	env.set_value("print".to_string(), Value::RustFunction(print));
+	let mut env = interpreter::Environment::new();
+	env.set_variable("print".to_string(), Value::RustFunction(lua_print));
 	for x in parser::StatementBuilder::new(parser::Tokenizer::new(src)) {
 		env.exec_statement(x.unwrap());
 	}

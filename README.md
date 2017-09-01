@@ -1,3 +1,7 @@
+### Not maintained
+This project is based on an old version of rust and is no longer maintained.
+
+
 # Moon
 
 A lua interpter written in rust. Does not support evey functionality of Lua, here is an example of program of supported features:

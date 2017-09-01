@@ -1,4 +1,4 @@
-### Not maintained
+# Not maintained
 This project is based on an old version of rust and is no longer maintained.
 
 
